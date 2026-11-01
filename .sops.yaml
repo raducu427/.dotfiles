@@ -1,0 +1,9 @@
+keys:
+  - &my_key ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK8IeWZuRU7PGpDYjD8hQwDr+gCBteeR2Hen98ghlhx1
+  - &host_key age1vt58k9wwnj7cphlxmcaymn8tfvvk09qq34nw5yj5t084t42c3dms4xyru8
+creation_rules:
+  - path_regex: secrets\.yaml$
+    key_groups:
+      - age:
+        - *my_key
+        - *host_key
