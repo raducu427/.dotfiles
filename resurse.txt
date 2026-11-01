@@ -15,7 +15,6 @@ sudo nix-collect-garbage --delete-older-than 1d
 
 https://wiki.nixos.org/wiki/Storage_optimization
 
-
 https://api.github.com/users/raducu427
 login "raducu427"
 id 32168993
