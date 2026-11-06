@@ -20,6 +20,7 @@
     pkgs.starship
     pkgs.fastfetch
     pkgs.libcanberra
+    pkgs.libsForQt5.qtwayland
 
     pkgs.kdePackages.qtsvg
     pkgs.kdePackages.kio
@@ -86,12 +87,17 @@
     pkgs.kde-rounded-corners
     #pkgs.sweet-kde
 
-    pkgs.kdePackages.kontact
+    /*pkgs.kdePackages.kontact
+    pkgs.kdePackages.merkuro
+    pkgs.kdePackages.akonadi
+    pkgs.kdePackages.akonadi-calendar
+    pkgs.kdePackages.korganizer
     pkgs.kdePackages.calendarsupport
     pkgs.kdePackages.kcalendarcore
     pkgs.kdePackages.libkdepim
     pkgs.kdePackages.kdepim-addons
     pkgs.kdePackages.kdepim-runtime
+    pkgs.libsForQt5.qtpim*/
   ];
 
   nixpkgs.overlays = [
@@ -155,6 +161,11 @@
   programs = {
     home-manager.enable = true;
 
+    /*akonadi = { enable = true; };
+    kdepim-addons = { enable = true; };
+    kdepim-runtime = { enable = true; };
+    akonadi-calendar = { enable = true; };*/
+
     firefox = {
       enable = true;
       profiles."Marius Raducan" = {
@@ -162,8 +173,10 @@
           "browser.tabs.inTitlebar" = 0;
           "browser.toolbars.bookmarks.visibility" = "never";
           "browser.download.always_ask_before_handling_new_types" = true;
+          "browser.translation.detectLanguage" = true;
           "browser.translation.ui.show" = true;
           "browser.translations.enable" = true;
+          #"browser.translation.neverForLanguages"
           "browser.translations.alwaysTranslateLanguages" = "ru,de,zh-Hans,zh-Hant,nl,fr,hi,ar,ja,it,es,pt";
           "sidebar.position_start" = false;
           "sidebar.revamp" = false;
@@ -344,7 +357,7 @@
       iconTheme = "BeautyLine";
       soundTheme = "ocean";
       #wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Kay/contents/images_dark/1080x1920.png";
-      wallpaper = "${pkgs.colorfuldarkglobal6-kde}/share/wallpapers/Colorful-Circle Wallpaper With Plasma Logo.png";
+      wallpaper = "${pkgs.colorfuldarkglobal6-kde}/share/wallpapers/Colorful-Wallpaper-Without Logo.png";
       splashScreen.theme = "Colorful-Splash-6";
     };
 

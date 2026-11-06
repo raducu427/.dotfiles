@@ -2,13 +2,12 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, inputs, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      #inputs.sops-nix.nixosModules.sops
     ];
 
   # Bootloader.
@@ -79,6 +78,8 @@
   # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
 
+  services.libinput.mouse.accelProfile = "flat";
+
   services.davfs2.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
@@ -141,6 +142,33 @@
     #media-session.enable = true;
   };
 
+  /*environment.etc."nextcloud-admin-pass".text = "Lmpgtp66634%";
+  services.nextcloud = {
+    enable = true;
+    hostName = "localhost";
+    config.adminpassFile = "/etc/nextcloud-admin-pass";
+    config.dbtype = "sqlite";
+    settings = {
+      # Some sane defaults required to satisfy Nextcloud configuration check
+      maintenance_window_start = 1;
+      default_phone_region = "DE";
+      log_type = "systemd";
+      serverid = 0;
+    };
+  };
+
+  # sudo -E -u www-data php occ user:add <username>
+  # sudo -E -u www-data php occ group:adduser admin <username>
+
+  services.nextcloud = {
+    extraApps = {
+      inherit (config.services.nextcloud.package.packages.apps) news contacts calendar tasks;
+    };
+    extraAppsEnable = true;
+  };*/
+
+  security.pam.services."cata".kwallet.enable = false;
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -151,6 +179,17 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       kdePackages.kate
+      kdePackages.kontact
+      kdePackages.merkuro
+      kdePackages.akonadi
+      kdePackages.akonadi-calendar
+      kdePackages.korganizer
+      kdePackages.calendarsupport
+      kdePackages.kcalendarcore
+      kdePackages.libkdepim
+      kdePackages.kdepim-addons
+      kdePackages.kdepim-runtime
+      libsForQt5.qtpim
     ];
   };
 
@@ -179,6 +218,14 @@
     ];
   };
 
+  fileSystems."/mnt/hdd" = {
+    device = "/dev/disk/by-uuid/8cacdf6f-3461-48f1-8a8c-c80556923914";
+    fsType = "ext4";
+    options = [
+      "defaults"
+    ];
+  };
+
   # Install firefox.
   programs.firefox.enable = true;
 
@@ -190,6 +237,9 @@
   # Enable KDE PIM suite, which includes applications like KMail and Kontact.
   programs.kde-pim = {
     enable = true;
+    kmail = true;
+    kontact = true;
+    merkuro = true;
   };
 
   programs.fish = {
