@@ -85,7 +85,7 @@
     pkgs.beauty-line-icon-theme
     pkgs.candy-icons
     pkgs.kde-rounded-corners
-    #pkgs.sweet-kde
+    pkgs.sweet-kde
 
     /*pkgs.kdePackages.kontact
     pkgs.kdePackages.merkuro
@@ -139,6 +139,9 @@
           cp -rd "Colorful Wallpapers"/* -t "$out/share/wallpapers"
         '';
       });
+    })
+    (final: prev: {
+      sweet-kde = prev.callPackage ./sweet-kde.nix {};
     })
   ];
 
