@@ -28,6 +28,16 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
+  nix.optimise.automatic = true;
+  nix.optimise.dates = [ "15:45" ];
+  #nix.settings.auto-optimise-store = true;
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
   # Enablebluetooth
   hardware.bluetooth = {
     enable = true;
@@ -142,31 +152,6 @@
     #media-session.enable = true;
   };
 
-  /*environment.etc."nextcloud-admin-pass".text = "Lmpgtp66634%";
-  services.nextcloud = {
-    enable = true;
-    hostName = "localhost";
-    config.adminpassFile = "/etc/nextcloud-admin-pass";
-    config.dbtype = "sqlite";
-    settings = {
-      # Some sane defaults required to satisfy Nextcloud configuration check
-      maintenance_window_start = 1;
-      default_phone_region = "DE";
-      log_type = "systemd";
-      serverid = 0;
-    };
-  };
-
-  # sudo -E -u www-data php occ user:add <username>
-  # sudo -E -u www-data php occ group:adduser admin <username>
-
-  services.nextcloud = {
-    extraApps = {
-      inherit (config.services.nextcloud.package.packages.apps) news contacts calendar tasks;
-    };
-    extraAppsEnable = true;
-  };*/
-
   security.pam.services."cata".kwallet.enable = false;
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -180,10 +165,17 @@
     packages = with pkgs; [
       kdePackages.kate
       kdePackages.kontact
+      kdePackages.kmail
+      kdePackages.kmail-account-wizard
       kdePackages.merkuro
       kdePackages.akonadi
       kdePackages.akonadi-calendar
+      kdePackages.akonadi-import-wizard
+      kdePackages.akonadi-search
+      kdePackages.akonadi-contacts
+      kdePackages.akonadiconsole
       kdePackages.korganizer
+      kdePackages.kcontacts
       kdePackages.calendarsupport
       kdePackages.kcalendarcore
       kdePackages.libkdepim
@@ -206,24 +198,32 @@
     };
   };
 
-  fileSystems."/mnt/Storage" = {
-    device = "https://u702228.your-storagebox.de";
-    fsType = "davfs";
-    options = [
-      "uid=cata"
-      "gid=users"
-      "mode=777"
-      "x-systemd.automount"
-      "noauto"
-    ];
-  };
-
-  fileSystems."/mnt/hdd" = {
-    device = "/dev/disk/by-uuid/8cacdf6f-3461-48f1-8a8c-c80556923914";
-    fsType = "ext4";
-    options = [
-      "defaults"
-    ];
+  fileSystems = {
+    "/mnt/Storage" = {
+      device = "https://u702228.your-storagebox.de";
+      fsType = "davfs";
+      options = [
+        "uid=cata"
+        "gid=users"
+        "mode=777"
+        "x-systemd.automount"
+        "noauto"
+      ];
+    };
+    "/mnt/hdd" = {
+      device = "/dev/disk/by-uuid/8cacdf6f-3461-48f1-8a8c-c80556923914";
+      fsType = "ext4";
+      options = [
+        "defaults"
+      ];
+    };
+    "/mnt/nvme" = {
+      device = "/dev/disk/by-uuid/6b835595-559d-48dd-b707-a8f3e65c3b4c";
+      fsType = "ext4";
+      options = [
+        "defaults"
+      ];
+    };
   };
 
   # Install firefox.
@@ -242,7 +242,7 @@
     merkuro = true;
   };
 
-  programs.fish = {
+  /*programs.fish = {
     enable = true;
     interactiveShellInit = ''
       set fish_greeting # Disable greeting
@@ -254,8 +254,7 @@
   };
 
   #users.users.cata.shell = pkgs.fish;
-  users.defaultUserShell = pkgs.fish;
-
+  users.defaultUserShell = pkgs.fish;*/
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

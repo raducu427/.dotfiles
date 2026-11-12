@@ -38,6 +38,7 @@
     ]))
 
     pkgs.kdePackages.okular
+    pkgs.kdePackages.kolourpaint
     pkgs.kdePackages.ghostwriter
     pkgs.kdePackages.gwenview
     pkgs.kdePackages.kclock
@@ -58,7 +59,7 @@
     pkgs.mpv
     pkgs.rhythmbox
     pkgs.shortwave
-    #pkgs.handbrake
+    pkgs.handbrake
     pkgs.ffmpeg
     pkgs.whatsie
     pkgs.pdf4qt
@@ -71,11 +72,12 @@
     pkgs.foliate
     pkgs.xournalpp
     pkgs.btop
+    pkgs.meld
+    pkgs.kdiff3
     pkgs.gparted
     pkgs.geoclue2
     pkgs.CuboCore.corekeyboard
     pkgs.otpclient
-    pkgs.exfatprogs
 
     pkgs.kdePackages.qtstyleplugin-kvantum
     pkgs.kdePackages.aurorae
@@ -100,50 +102,52 @@
     pkgs.libsForQt5.qtpim*/
   ];
 
-  nixpkgs.overlays = [
-    (final: prev: {
-      CuboCore.corekeyboard = prev.CuboCore.corekeyboard.overrideAttrs (old: {
-        src = prev.fetchFromGitLab {
-          owner = "raducu427";
-          repo = "corekeyboard-sweet";
-          tag = "v5.0.1";
-          hash = "sha256-OWDFT8pkCmI0CVSfDo3aksymoyZnI1kvRP5F5QNvsyA=";
-        };
-      });
-    })
-    (final: prev: {
-      colorfuldarkglobal6-kde = prev.colorfuldarkglobal6-kde.overrideAttrs (old: {
-        installPhase = ''
-          mkdir -p "$out/share/plasma/look-and-feel/Colorful-Splash-6"
-          mkdir -p "$out/share/aurorae/themes"
-          mkdir -p "$out/share/color-schemes"
-          mkdir -p "$out/share/konsole"
-          mkdir -p "$out/share/icons/Colorful-Dark-6"
-          mkdir -p "$out/share/kvantum/Colorful-Dark-Kvantum"
-          mkdir -p "$out/share/wallpapers"
+  nixpkgs = {
+    overlays = [
+      (final: prev: {
+        CuboCore.corekeyboard = prev.CuboCore.corekeyboard.overrideAttrs (old: {
+          src = prev.fetchFromGitLab {
+            owner = "raducu427";
+            repo = "corekeyboard-sweet";
+            tag = "v5.0.1";
+            hash = "sha256-OWDFT8pkCmI0CVSfDo3aksymoyZnI1kvRP5F5QNvsyA=";
+          };
+        });
+      })
+      (final: prev: {
+        colorfuldarkglobal6-kde = prev.colorfuldarkglobal6-kde.overrideAttrs (old: {
+          installPhase = ''
+            mkdir -p "$out/share/plasma/look-and-feel/Colorful-Splash-6"
+            mkdir -p "$out/share/aurorae/themes"
+            mkdir -p "$out/share/color-schemes"
+            mkdir -p "$out/share/konsole"
+            mkdir -p "$out/share/icons/Colorful-Dark-6"
+            mkdir -p "$out/share/kvantum/Colorful-Dark-Kvantum"
+            mkdir -p "$out/share/wallpapers"
 
-          cp -rd "Colorful SplashScreen/Colorful-Splash-6"/* -t "$out/share/plasma/look-and-feel/Colorful-Splash-6/"
+            cp -rd "Colorful SplashScreen/Colorful-Splash-6"/* -t "$out/share/plasma/look-and-feel/Colorful-Splash-6/"
 
 
-          cp -rd "Colorful Window Decorations/Colorful-Blur-Dark-Aurorae-6" -t "$out/share/aurorae/themes/"
-          cp -rd "Colorful Window Decorations/Colorful-Dark-Aurorae-6" -t "$out/share/aurorae/themes/"
-          cp -rd "Colorful Window Decorations/Colorful-Dark-Color-Aurorae-6" -t "$out/share/aurorae/themes/"
+            cp -rd "Colorful Window Decorations/Colorful-Blur-Dark-Aurorae-6" -t "$out/share/aurorae/themes/"
+            cp -rd "Colorful Window Decorations/Colorful-Dark-Aurorae-6" -t "$out/share/aurorae/themes/"
+            cp -rd "Colorful Window Decorations/Colorful-Dark-Color-Aurorae-6" -t "$out/share/aurorae/themes/"
 
-          cp -rd "Colorful Konsole Color Schemes"/* -t "$out/share/konsole"
+            cp -rd "Colorful Konsole Color Schemes"/* -t "$out/share/konsole"
 
-          cp -rd "Colorful Color Schemes"/* -t "$out/share/color-schemes/"
-          cp -rd "Colorful Icons Themes/Colorful-Dark-Icons" -t "$out/share/icons/"
+            cp -rd "Colorful Color Schemes"/* -t "$out/share/color-schemes/"
+            cp -rd "Colorful Icons Themes/Colorful-Dark-Icons" -t "$out/share/icons/"
 
-          cp -rd "Colorful Kvantum Themes/Colorful-Dark-Kvantum" -t "$out/share/kvantum/Colorful-Dark-Kvantum/"
+            cp -rd "Colorful Kvantum Themes/Colorful-Dark-Kvantum" -t "$out/share/kvantum/Colorful-Dark-Kvantum/"
 
-          cp -rd "Colorful Wallpapers"/* -t "$out/share/wallpapers"
-        '';
-      });
-    })
-    (final: prev: {
-      sweet-kde = prev.callPackage ./sweet-kde.nix {};
-    })
-  ];
+            cp -rd "Colorful Wallpapers"/* -t "$out/share/wallpapers"
+          '';
+        });
+      })
+      (final: prev: {
+        sweet-kde = prev.callPackage ./sweet-kde.nix {};
+      })
+    ];
+  };
 
   home.file = {
     #"/home/cata/.gtkrc-2.0".force = lib.mkForce true;
@@ -360,7 +364,8 @@
       iconTheme = "BeautyLine";
       soundTheme = "ocean";
       #wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Kay/contents/images_dark/1080x1920.png";
-      wallpaper = "${pkgs.colorfuldarkglobal6-kde}/share/wallpapers/Colorful-Wallpaper-Without Logo.png";
+      #wallpaper = "${pkgs.colorfuldarkglobal6-kde}/share/wallpapers/Colorful-Wallpaper-Without Logo.png";
+      wallpaper = "${pkgs.colorfuldarkglobal6-kde}/share/wallpapers/Colorful-Circle Wallpaper Without Logo.png";
       splashScreen.theme = "Colorful-Splash-6";
     };
 
@@ -510,6 +515,7 @@
                   "org.kde.plasma.bluetooth"
                   "org.kde.plasma.clipboard"
                   "org.kde.plasma.networkmanagement"
+                  "org.kde.plasma.keyboardindicator"
                   "org.kde.plasma.printmanager"
                   "org.kde.kscreen"
                   "org.kde.plasma.battery"
@@ -517,7 +523,6 @@
                 ];
                 shown = [
                   "org.kde.plasma.keyboardlayout"
-                  "org.kde.plasma.keyboardindicator"
                   "org.kde.plasma.weather"
                   "org.kde.plasma.volume"
                   "org.kde.plasma.brightness"
