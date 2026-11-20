@@ -37,6 +37,7 @@
       p.standard-library
     ]))
 
+    pkgs.kdePackages.kate
     pkgs.kdePackages.okular
     pkgs.kdePackages.kolourpaint
     pkgs.kdePackages.ghostwriter
@@ -89,17 +90,21 @@
     pkgs.kde-rounded-corners
     pkgs.sweet-kde
 
-    /*pkgs.kdePackages.kontact
+    pkgs.kdePackages.kontact
+    pkgs.kdePackages.kcontacts
+    pkgs.kdePackages.kmail
+    pkgs.kdePackages.kmail-account-wizard
+    pkgs.kdePackages.korganizer
+    pkgs.kdePackages.kdepim-addons
+    pkgs.kdePackages.kdepim-runtime
     pkgs.kdePackages.merkuro
     pkgs.kdePackages.akonadi
     pkgs.kdePackages.akonadi-calendar
-    pkgs.kdePackages.korganizer
-    pkgs.kdePackages.calendarsupport
-    pkgs.kdePackages.kcalendarcore
-    pkgs.kdePackages.libkdepim
-    pkgs.kdePackages.kdepim-addons
-    pkgs.kdePackages.kdepim-runtime
-    pkgs.libsForQt5.qtpim*/
+    pkgs.kdePackages.akonadi-contacts
+    pkgs.kdePackages.akonadi-import-wizard
+    pkgs.kdePackages.akonadi-search
+    pkgs.kdePackages.akonadi-mime
+    pkgs.kdePackages.akonadiconsole
   ];
 
   nixpkgs = {
