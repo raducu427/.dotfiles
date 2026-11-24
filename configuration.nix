@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, username, ... }:
 
 {
   imports =
@@ -19,7 +19,7 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -123,22 +123,18 @@
 
   services.displayManager = {
 	autoLogin.enable = true;
-	autoLogin.user = "cata";
+	autoLogin.user = "${username}";
   };
 
+  services.libinput.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
-    libinput.enable = true;
     xkb = {
       layout = "ro,us";
       variant = "std,";
     };
   };
-
-  services.displayManager.sddm.setupScript = ''
-    ${pkgs.onboard}/bin/onboard &
-  '';
 
 services.interception-tools = {
   enable = true;
@@ -165,20 +161,22 @@ services.interception-tools = {
     #media-session.enable = true;
   };
 
+  services.udev.extraRules = ''
+    # Optical Drive access for K3b
+    KERNEL=="sr[0-9]*", GROUP="cdrom", MODE="0660"
+  '';
+
   /*security.pam.services = {
     sddm.kwallet.enable = true;
     sddm-autoLogin.kwallet.enable = true;
-    cata.kwallet.enable = true;
+    ${username}.kwallet.enable = true;
   };*/
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users."cata" = {
+  users.users."${username}" = {
     isNormalUser = true;
-    description = "cata";
-    extraGroups = [ "networkmanager" "wheel" ];
+    description = "${username}";
+    extraGroups = [ "networkmanager" "wheel" "cdrom" ];
     packages = with pkgs; [
       interception-tools
       interception-tools-plugins.caps2esc
@@ -188,7 +186,7 @@ services.interception-tools = {
   sops = {
     defaultSopsFile = ./secrets.yaml;
     age.sshKeyPaths = [
-      "/home/cata/.ssh/id_ed25519"
+      "/home/${username}/.ssh/id_ed25519"
       "/etc/ssh/ssh_host_ed25519_key"
     ];
     secrets.webdav = {
@@ -203,7 +201,7 @@ services.interception-tools = {
       device = "https://u702228.your-storagebox.de";
       fsType = "davfs";
       options = [
-        "uid=cata"
+        "uid=${username}"
         "gid=users"
         "mode=777"
         "x-systemd.automount"
@@ -233,6 +231,7 @@ services.interception-tools = {
 
   programs.partition-manager.enable = true;
 
+  programs.k3b.enable = true;
 
   # Enable KDE PIM suite, which includes applications like KMail and Kontact.
   programs.kde-pim = {
@@ -253,7 +252,7 @@ services.interception-tools = {
     '';
   };
 
-  #users.users.cata.shell = pkgs.fish;
+  #users.users.${username}.shell = pkgs.fish;
   #users.defaultUserShell = pkgs.fish;
 
   # List packages installed in system profile. To search, run:
@@ -266,6 +265,7 @@ services.interception-tools = {
     sops
     ssh-to-age
     kdePackages.plasma-login-manager
+    kdePackages.k3b
     sddm-astronaut
     sound-theme-freedesktop
     pavucontrol

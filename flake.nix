@@ -23,12 +23,14 @@
   outputs = { self, nixpkgs, home-manager, ... }@inputs:
     let
       lib = nixpkgs.lib;
+      username = "cata";
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in {
     nixosConfigurations = {
       nixos = lib.nixosSystem {
         inherit system;
+        specialArgs = { inherit username; };
         modules = [
           ./configuration.nix
           #inputs.stylix.nixosModules.stylix
@@ -37,14 +39,15 @@
       };
     };
     homeConfigurations = {
-      cata = home-manager.lib.homeManagerConfiguration {
+      ${username} = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
+        extraSpecialArgs = { inherit username; };
         modules = [
           ./home.nix
           inputs.plasma-manager.homeModules.plasma-manager
           {
             home = {
-              homeDirectory = "/home/cata";
+              homeDirectory = "/home/${username}";
             };
           }
         ];

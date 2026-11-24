@@ -1,8 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, username, ... }:
 
 {
-  home.username = "cata";
-  home.homeDirectory = "/home/cata";
+  home.username = "${username}";
+  home.homeDirectory = "/home/${username}";
 
   home.stateVersion = "26.05";
 
@@ -62,6 +62,13 @@
     pkgs.shortwave
     pkgs.handbrake
     pkgs.ffmpeg
+    pkgs.mixxx
+
+    pkgs.ardour
+    pkgs.lsp-plugins
+    pkgs.calf
+    pkgs.zynaddsubfx
+
     pkgs.whatsie
     pkgs.pdf4qt
     pkgs.pdf2odt
@@ -155,10 +162,10 @@
   };
 
   home.file = {
-    #"/home/cata/.gtkrc-2.0".force = lib.mkForce true;
-    #"/home/cata/.config/gtk-3.0/settings.ini".force = lib.mkForce true;
-    #"/home/cata/.config/gtk-4.0/settings.ini".force = lib.mkForce true;
-    #"/home/cata/.config/mozilla/firefox/Marius Raducan/search.json.mozlz4".force = lib.mkForce true;
+    #"/home/${username}/.gtkrc-2.0".force = lib.mkForce true;
+    #"/home/${username}/.config/gtk-3.0/settings.ini".force = lib.mkForce true;
+    #"/home/${username}/.config/gtk-4.0/settings.ini".force = lib.mkForce true;
+    #"/home/${username}/.config/mozilla/firefox/Marius Raducan/search.json.mozlz4".force = lib.mkForce true;
   };
 
   #home.keyboard.layout = "ro,us";
@@ -369,8 +376,8 @@
       iconTheme = "BeautyLine";
       soundTheme = "ocean";
       #wallpaper = "${pkgs.kdePackages.plasma-workspace-wallpapers}/share/wallpapers/Kay/contents/images_dark/1080x1920.png";
-      #wallpaper = "${pkgs.colorfuldarkglobal6-kde}/share/wallpapers/Colorful-Wallpaper-Without Logo.png";
-      wallpaper = "${pkgs.colorfuldarkglobal6-kde}/share/wallpapers/Colorful-Circle Wallpaper Without Logo.png";
+      wallpaper = "${pkgs.colorfuldarkglobal6-kde}/share/wallpapers/Colorful-Wallpaper-Without Logo.png";
+      #wallpaper = "${pkgs.colorfuldarkglobal6-kde}/share/wallpapers/Colorful-Circle Wallpaper Without Logo.png";
       splashScreen.theme = "Colorful-Splash-6";
     };
 
